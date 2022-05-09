@@ -1,15 +1,17 @@
+
 * {
-  box-sizing: border-box;
-}
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-family: "Montserrat", "sans-serif";
+    --color-pink-500: rgb(247, 37, 133);
+    --color-blue-300: rgb(76, 201, 240);
+    --color-purple-500: rgb(86, 11, 173);
+    --color-purple-600: rgb(72, 12, 168);
+   
 
-html {
-  font-family: "Vollkorn", serif;
-
-  --color-white: rgb(255, 255, 255);
-
-  --color-blue-500: #7209B7;
-
-  --color-gray-50: rgb(243, 236, 230);
+--color-gray-50: rgb(243, 236, 230);
   --color-gray-100: rgb(207, 201, 195);
   --color-gray-300: rgb(99, 92, 86);
   --color-gray-400: rgb(70, 65, 60);
@@ -20,7 +22,7 @@ html {
   --color-primary-50: rgb(253, 224, 200);
   --color-primary-100: rgb(253, 214, 183);
   --color-primary-200: rgb(250, 191, 143);
-  --color-primary-400: rgb(254, 228, 64);
+  --color-primary-400: rgb(223, 159, 41);
   --color-primary-500: rgb(212, 136, 14);
   --color-primary-700: rgb(212, 120, 14);
   --color-primary-200-contrast: rgb(100, 46, 2);
@@ -41,38 +43,44 @@ html {
   --border-radius-medium: 6px;
 
   --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-body {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
-  margin: 0;
-}
-main {
-  width: 90%;
-  max-width: 50rem;
-  margin: 0 auto;
-}
-ul,
-ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-a {
-  text-decoration: none;
-  color: var(--color-primary-400);
-}
-.btn {
-  cursor: pointer;
-  font: inherit;
-  padding: var(--space-2) var(--space-6);
-  background-color: var(--color-primary-500);
-  color:var(--color-primary-500-contrast);
-  border:1px solid var(--color-primary-500);
-  border-radius: var(--border-radius-small);
-}
-.btn:hover,
-.btn:active{
+  }
+  
+  body {
+    background-color: var(--color-purple-500);
+    color: var(--color-pink-500);
+    margin: 0;
+  }
+  
+  main {
+    width: 90%;
+    max-width: 50rem;
+    margin: 0 auto;
+  }
+  
+  ul, 
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  a {
+    text-decoration: none;
+    color: var(--color-primary-400);
+  }
+  
+  .btn {
+    cursor: pointer;
+    font: inherit;
+    padding: var(--space-2) var(--space-6);
+    background-color: var(--color-primary-500);
+    color: var(--color-primary-500-contrast);
+    border: 1px solid var(--color-primary-500);
+    border-radius: var(--border-radius-small);
+  }
+  
+  .btn:hover,
+  .btn:active {
     background-color: var(--color-primary-700);
     border-color: var(--color-primary-700);
-}
+  }
