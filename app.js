@@ -8,6 +8,9 @@ const db = require("./database/database");
 const addCsrfTokenMiddleware= require('./middlewares/csrf-token');
 const errorHandlerMiddleware = require('./middlewares/error-handler');
 const authRoutes = require("./routes/auth.routes");
+const productRoutes = require("./routes/products.routes");
+const baseRoutes = require("./routes/base.routes");
+
 const app = express();
 const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
@@ -17,7 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(expressSession(createSessionConfig()));
 app.use(csrf());
 app.use(addCsrfTokenMiddleware);
+
+app.use(baseRoutes);
 app.use(authRoutes);
+app.use(productRoutes);
+
 app.use(errorHandlerMiddleware);
 db.connectToDatabase().then(()=>{
     app.listen(port);
