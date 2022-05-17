@@ -1,5 +1,5 @@
 function getSessionData(req){
-    const sessionData = req.session.getItem('sessionData');
+    const sessionData = req.session.flashedData;
     req.session.flashedData = null;
     return sessionData;
 }
