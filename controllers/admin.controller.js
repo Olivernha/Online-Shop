@@ -1,6 +1,14 @@
-const Product = require('../models/product.model')
-function getProducts(req, res) {
-  res.render("admin/products/all-products");
+const Product = require("../models/product.model");
+async function getProducts(req, res) {
+  try {
+    const products = await Product.findAll();
+
+    res.render("admin/products/all-products",{products:products});
+  } catch (err) {
+    next(err);
+    return;
+  }
+
 }
 function getNewProduct(req, res) {
   return res.render("admin/products/new-product");
