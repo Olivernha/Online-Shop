@@ -1,5 +1,5 @@
 const Product = require("../models/product.model");
-async function getProducts(req, res,next) {
+async function getProducts(req, res, next) {
   try {
     const products = await Product.findAll();
 
@@ -9,7 +9,7 @@ async function getProducts(req, res,next) {
     return;
   }
 }
-function getNewProduct(req, res,next) {
+function getNewProduct(req, res, next) {
   return res.render("admin/products/new-product");
 }
 async function createNewProduct(req, res) {
@@ -23,7 +23,7 @@ async function createNewProduct(req, res) {
   }
   res.redirect("/admin/products");
 }
-async function getUpdateProduct(req, res,next) {
+async function getUpdateProduct(req, res, next) {
   try {
     const product = await Product.findById(req.params.id);
     res.render("admin/products/update-product", { product: product });
@@ -31,25 +31,35 @@ async function getUpdateProduct(req, res,next) {
     next(err);
     return;
   }
-
 }
-async function updateProduct(req,res,next) {
-    const product = new Product({
-           ...req.body,
-            _id: req.params.id
-        });
+async function updateProduct(req, res, next) {
+  const product = new Product({
+    ...req.body,
+    _id: req.params.id,
+  });
 
-    if(req.file){
+  if (req.file) {
     //  replace the old image with the new one
-        product.replaceImage(req.file.filename);
-    }
-    try{
-         await product.save();
-    }catch(err){
-         next(err);
-         return;
-    }
-    res.redirect("/admin/products");
+    product.replaceImage(req.file.filename);
+  }
+  try {
+    await product.save();
+  } catch (err) {
+    next(err);
+    return;
+  }
+  res.redirect("/admin/products");
+}
+async function deleteProduct(req, res, next) {
+  let product;
+  try {
+    product = await Product.findById(req.params.id);
+    await product.remove();
+  } catch (err) {
+    next(err);
+    return;
+  }
+  res.redirect("/admin/products");
 }
 module.exports = {
   getNewProduct,
@@ -57,4 +67,5 @@ module.exports = {
   createNewProduct,
   getUpdateProduct,
   updateProduct,
+  deleteProduct
 };
