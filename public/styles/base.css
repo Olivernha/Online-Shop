@@ -9,6 +9,8 @@ html {
   --color-purple-500: rgb(86, 11, 173);
   --color-purple-600: rgb(72, 12, 168);
   --color-blue-600: rgb(56 3 116);
+  --color-blue-600-bg: rgb(50 9 98);
+  --color-blue-500: rgb(71 10 142);
 
   --color-gray-50: rgb(243, 236, 230);
   --color-gray-100: rgb(207, 201, 195);
