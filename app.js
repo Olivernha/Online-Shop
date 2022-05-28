@@ -14,6 +14,7 @@ const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/products.routes");
 const baseRoutes = require("./routes/base.routes");
 const adminRoutes = require('./routes/admin.routes');
+const cartRoutes = require('./routes/cart.routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,6 +23,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/products/assets',express.static(path.join(__dirname, "product-data")));
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 const sessionConfig = createSessionConfig();
 app.use(expressSession(sessionConfig));
 
@@ -32,6 +34,7 @@ app.use(checkAuthStatusMiddleware);
 app.use(baseRoutes);
 app.use(authRoutes);
 app.use(productRoutes);
+app.use('/cart',cartRoutes);
 app.use(protectedRoutesMiddleware);
 app.use('/admin',adminRoutes);
 
