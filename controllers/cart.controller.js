@@ -28,7 +28,7 @@ function updateCartItem(req, res) {
   res.status(200).json({
     message: "Product updated in cart",
     updatedCartData: {
-      newTotalItems: cart.totalQuantity,
+      newTotalQuantity: cart.totalQuantity,
       newTotalPrice: cart.totalPrice,
       updatedItemPrice: updatedItemData.updatedItemPrice,
     },
