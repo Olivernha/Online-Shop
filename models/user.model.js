@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const mongodb = require('mongodb');
-const db = require('../database/database');
+const db = require('../data/database');
 
 class User {
     constructor(email, password, fullname, street, postal, city) {
