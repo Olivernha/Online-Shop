@@ -1,3 +1,4 @@
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 const Order = require("../models/order.model");
 const User = require("../models/user.model");
 
@@ -31,11 +32,35 @@ async function addOrder(req, res, next) {
   }
 
   req.session.cart = null;
-
-  res.redirect("/orders");
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "dummy",
+          },
+          unit_amount_decimal: 10.99
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: "localhost:3000/orders/success",
+    cancel_url: "localhost:3000/orders/failure",
+  });
+  res.redirect(303, session.url);
 }
-
+function getSuccess(req,res){
+  res.render("customer/orders/success");
+}
+function getFailure(req,res){
+  res.render("customer/orders/failure");
+}
 module.exports = {
   addOrder: addOrder,
   getOrders: getOrders,
+    getSuccess: getSuccess,
+    getFailure: getFailure
 };
