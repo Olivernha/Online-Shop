@@ -32,23 +32,24 @@ async function addOrder(req, res, next) {
   }
 
   req.session.cart = null;
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: "dummy",
-          },
-          unit_amount_decimal: 10.99
-        },
-        quantity: 1,
-      },
-    ],
+    line_items: cart.items.map(function(item){
+        return {
+                 price_data: {
+                      currency: "usd",
+                      product_data: {
+                        name: item.product.title,
+                      },
+                      unit_amount: +item.product.price.toFixed(2) * 100
+                    },
+                 quantity: item.quantity
+        }
+    }),
     mode: "payment",
-    success_url: "localhost:3000/orders/success",
-    cancel_url: "localhost:3000/orders/failure",
+    success_url: "http://localhost:3000/orders/success",
+    cancel_url: "http://localhost:3000/orders/failure",
   });
   res.redirect(303, session.url);
 }
