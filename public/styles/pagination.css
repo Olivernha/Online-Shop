@@ -1,0 +1,14 @@
+.pagination{
+    text-align: center;
+}
+.pagination a {
+    color: var(--color-primary-500);
+    text-decoration: none;
+    padding: .5rem;
+    border : 1px solid var(--color-primary-400);
+    margin: 0 1rem;
+}
+.pagination a:hover,
+.pagination a:active{
+    background-color: var(--color-primary-500-bg);
+}

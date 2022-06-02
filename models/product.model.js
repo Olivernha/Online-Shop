@@ -1,7 +1,7 @@
 const mongodb = require("mongodb");
 const deleteFile = require("../util/detachFile");
 const db = require("../data/database");
-
+const ITEMS_PER_PAGE = 3;
 class Product {
   constructor(productData) {
     this.title = productData.title;
@@ -37,8 +37,13 @@ class Product {
     return new Product(product);
   }
 
-  static async findAll() {
-    const products = await db.getDb().collection("products").find().toArray();
+  static async findAll(page) {
+    const products = await db
+      .getDb()
+      .collection("products")
+      .find()
+      .skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+      .toArray();
 
     return products.map(function (productDocument) {
       return new Product(productDocument);
@@ -74,7 +79,7 @@ class Product {
       description: this.description,
       image: this.image,
     };
-    
+
     if (this.id) {
       const productId = new mongodb.ObjectId(this.id);
       if (!this.image) {
