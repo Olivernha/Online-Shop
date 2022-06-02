@@ -1,4 +1,15 @@
-
+.download-icon{
+    width: 20px;
+    height: 20px;
+}
+.download-section{
+    display: flex;
+    align-items: center;
+}
+.order-details{
+    display: flex;
+    justify-content: space-between;
+}
 .order-item {
     background-color: var(--color-blue-600-bg);
     border-radius: var(--border-radius-small);
@@ -54,4 +65,5 @@
     .order-summary {
         flex-direction: row;
     }
+   
 }
