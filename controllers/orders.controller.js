@@ -77,25 +77,44 @@ async function getInvoice(req, res, next) {
     error.status = 404;
     return next(error);
   }
-  if(order.userData._id.toString() !==  res.locals.uid) {
+  if (order.userData._id.toString() !== res.locals.uid) {
     const error = new Error();
     error.status = 500;
     return next(error);
   }
+  console.log(orderId);
   const invoiceName = "invoice-" + orderId + ".pdf";
-  const invoicePath = path.join("data", "invoices", invoiceName);
-
+  const invoicePath = path.join("invoices", invoiceName);
+  console.log(invoicePath);
   const pdfDoc = new PDFDocument();
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader(
     "Content-Disposition",
     'inline; filename="' + invoiceName + '"'
   );
-  pdfDoc.pipe(fs.createReadStream(invoicePath));
+  pdfDoc.pipe(fs.createWriteStream(invoicePath));
   pdfDoc.pipe(res);
-  pdfDoc.text('Hello World')
+  pdfDoc.fontSize(26).text("Invoice --- Gavin & Oliver", {
+    underline: true,
+  });
+  pdfDoc.text("--------------------------");
+  let totalPrice = 0;
+  order.productData.items.forEach((prod) => {
+    totalPrice += prod.quantity * prod.product.price;
+    pdfDoc
+      .fontSize(14)
+      .text(
+        prod.product.title +
+          " - " +
+          prod.quantity +
+          " x " +
+          "$ " +
+          prod.product.price
+      );
+  });
+  pdfDoc.text("---");
+  pdfDoc.fontSize(20).text("Total Price: $" + totalPrice);
   pdfDoc.end();
- 
 }
 module.exports = {
   addOrder: addOrder,
