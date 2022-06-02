@@ -1,6 +1,6 @@
-const mongodb = require('mongodb');
-
-const db = require('../data/database');
+const mongodb = require("mongodb");
+const deleteFile = require("../util/detachFile");
+const db = require("../data/database");
 
 class Product {
   constructor(productData) {
@@ -25,11 +25,11 @@ class Product {
     }
     const product = await db
       .getDb()
-      .collection('products')
+      .collection("products")
       .findOne({ _id: prodId });
 
     if (!product) {
-      const error = new Error('Could not find product with provided id.');
+      const error = new Error("Could not find product with provided id.");
       error.code = 404;
       throw error;
     }
@@ -38,7 +38,7 @@ class Product {
   }
 
   static async findAll() {
-    const products = await db.getDb().collection('products').find().toArray();
+    const products = await db.getDb().collection("products").find().toArray();
 
     return products.map(function (productDocument) {
       return new Product(productDocument);
@@ -46,13 +46,13 @@ class Product {
   }
 
   static async findMultiple(ids) {
-    const productIds = ids.map(function(id) {
+    const productIds = ids.map(function (id) {
       return new mongodb.ObjectId(id);
-    })
+    });
 
     const products = await db
       .getDb()
-      .collection('products')
+      .collection("products")
       .find({ _id: { $in: productIds } })
       .toArray();
 
@@ -74,22 +74,25 @@ class Product {
       description: this.description,
       image: this.image,
     };
-
+    
     if (this.id) {
       const productId = new mongodb.ObjectId(this.id);
-
       if (!this.image) {
         delete productData.image;
+      } else {
+        const product = await Product.findById(this.id);
+        const deleteImage = product.image;
+        await deleteFile(deleteImage);
       }
 
-      await db.getDb().collection('products').updateOne(
+      await db.getDb().collection("products").updateOne(
         { _id: productId },
         {
           $set: productData,
         }
       );
     } else {
-      await db.getDb().collection('products').insertOne(productData);
+      await db.getDb().collection("products").insertOne(productData);
     }
   }
 
@@ -100,7 +103,8 @@ class Product {
 
   remove() {
     const productId = new mongodb.ObjectId(this.id);
-    return db.getDb().collection('products').deleteOne({ _id: productId });
+    deleteFile(this.image);
+    return db.getDb().collection("products").deleteOne({ _id: productId });
   }
 }
 
