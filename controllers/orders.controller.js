@@ -1,6 +1,7 @@
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const fs = require("fs");
 const path = require("path");
+const PDFDocument = require("pdfkit");
 const Order = require("../models/order.model");
 const User = require("../models/user.model");
 
@@ -83,19 +84,18 @@ async function getInvoice(req, res, next) {
   }
   const invoiceName = "invoice-" + orderId + ".pdf";
   const invoicePath = path.join("data", "invoices", invoiceName);
-  let data;
-  try {
-    data = await fs.readFile(invoicePath);
-  } catch (e) {
-    next(e);
-    return;
-  }
+
+  const pdfDoc = new PDFDocument();
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader(
     "Content-Disposition",
     'inline; filename="' + invoiceName + '"'
   );
-  res.send(data);
+  pdfDoc.pipe(fs.createReadStream(invoicePath));
+  pdfDoc.pipe(res);
+  pdfDoc.text('Hello World')
+  pdfDoc.end();
+ 
 }
 module.exports = {
   addOrder: addOrder,
