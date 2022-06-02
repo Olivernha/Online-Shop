@@ -2,8 +2,12 @@
 const path = require("path");
 require("dotenv").config();
 const express = require("express");
+const fs = require("fs");
 const csrf = require("csurf");
 const expressSession = require("express-session");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
 
 const createSessionConfig = require("./config/session");
 const db = require("./data/database");
@@ -22,10 +26,12 @@ const cartRoutes = require("./routes/cart.routes");
 const ordersRoutes = require("./routes/orders.routes");
 
 const app = express();
-
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'), {flags: 'a'});
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined',{stream: accessLogStream}));
 app.use(express.static("public"));
 app.use("/products/assets", express.static("product-data"));
 app.use(express.urlencoded({ extended: false }));
@@ -53,7 +59,8 @@ app.use(errorHandlerMiddleware);
 
 db.connectToDatabase()
   .then(function () {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
+    
   })
   .catch(function (error) {
     console.log("Failed to connect to the database!");
