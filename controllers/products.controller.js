@@ -1,15 +1,15 @@
 const Product = require("../models/product.model");
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 1;
 
 async function getAllProducts(req, res, next) {
-  const page = req.query.page || 1;
+  const page = +req.query.page || 1;
 
   try {
     const products = await Product.findAll(page, ITEMS_PER_PAGE);
     const totalItems = await Product.countProducts();
     res.render("customer/products/all-products", {
       products: products,
-      totalItems: totalItems,
+      currentPage: page,
       hasNextPage: ITEMS_PER_PAGE * page < totalItems,
       hasPreviousPage: page > 1,
       nextPage: page + 1,
