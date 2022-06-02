@@ -1,10 +1,21 @@
 const Product = require("../models/product.model");
 const Order = require("../models/order.model");
-
+const ITEMS_PER_PAGE = 3;
 async function getProducts(req, res, next) {
+  const page = +req.query.page || 1;
   try {
-    const products = await Product.findAll();
-    res.render("admin/products/all-products", { products: products });
+    const products = await Product.findAll(page, ITEMS_PER_PAGE);
+    const totalItems = await Product.countProducts();
+
+    res.render("admin/products/all-products", {
+      products: products,
+      currentPage: page,
+      hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+      hasPreviousPage: page > 1,
+      nextPage: page + 1,
+      previousPage: page - 1,
+      lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+    });
   } catch (error) {
     next(error);
     return;
@@ -45,9 +56,9 @@ async function updateProduct(req, res, next) {
     ...req.body,
     _id: req.params.id,
   });
-  
+
   if (req.file) {
-    product.replaceImage(req.file.filename)
+    product.replaceImage(req.file.filename);
   }
 
   try {

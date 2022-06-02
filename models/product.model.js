@@ -48,7 +48,7 @@ class Product {
       .collection("products")
       .find()
       .skip((page - 1) * ITEMS_PER_PAGE)
-      .limit(ITEMS_PER_PAGE)
+      .limit(+ITEMS_PER_PAGE)
       .toArray();
 
     return products.map(function (productDocument) {

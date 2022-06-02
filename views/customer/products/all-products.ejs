@@ -13,6 +13,13 @@
              </li>
          <% } %>
      </ul>
-     <%- include('../../shared/includes/pagination') %>
+     <%- include('../../shared/includes/pagination',{
+         currentPage: currentPage, 
+         nextPage: nextPage,
+         previousPage: previousPage,
+         lastPage: lastPage,
+         hasNextPage: hasNextPage,
+         hasPreviousPage: hasPreviousPage
+     }) %>
 </main>
 <%- include('../../shared/includes/footer.ejs') %>
