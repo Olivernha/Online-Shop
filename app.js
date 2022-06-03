@@ -31,13 +31,10 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'), 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(
-  helmet.contentSecurityPolicy({
-    useDefaults: true,
-    directives: {
-      "img-src": ["'self'", "https: data:"]
-    }
+  helmet({
+    contentSecurityPolicy: false,
   })
-)
+);
 app.use(compression());
 app.use(morgan('combined',{stream: accessLogStream}));
 app.use(express.static("public"));
