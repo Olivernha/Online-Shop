@@ -3,7 +3,7 @@ const path = require("path");
 require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
-const https = require("https");
+// const https = require("https");
 const csrf = require("csurf");
 const expressSession = require("express-session");
 const helmet = require("helmet");
@@ -62,10 +62,11 @@ app.use(errorHandlerMiddleware);
 
 db.connectToDatabase()
   .then(function () {
-    https.createServer({
-      key: privateKey,
-      cert: certificate
-    },app).listen(process.env.PORT || 3000);
+    // https.createServer({
+    //   key: privateKey,
+    //   cert: certificate
+    // },app).listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 3000);
     
   })
   .catch(function (error) {
