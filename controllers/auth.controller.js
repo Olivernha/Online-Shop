@@ -1,18 +1,19 @@
 // const nodemailer = require('nodemailer');
 // const sendgridTransport = require('nodemailer-sendgrid-transport');
-const sendgrid = require("@sendgrid/mail");
+const nodemailer = require("nodemailer");
 const User = require("../models/user.model");
 const authUtil = require("../util/authentication");
 const validation = require("../util/validation");
 const sessionFlash = require("../util/session-flash");
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-// const transporter = nodemailer.createTransport(
-//   sendgridTransport({
-//     auth: {
-//       api_key: process.env.SENDGRID_API_KEY
-//     },
-//   })
-// );
+
+const transport = nodemailer.createTransport({
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: process.env.MAILTRAP_USER,
+    pass: process.env.MAILTRAP_PASS,
+  }
+});
 function getSignup(req, res) {
   let sessionData = sessionFlash.getSessionData(req);
   if (!sessionData) {
@@ -98,8 +99,8 @@ async function signup(req, res, next) {
     return;
   }
 
-  sendgrid.send({
-    to: "test2022@knowledgemd.com",
+  transport.sendMail({
+    to: user.email,
     from: "gavin-oliver@knowledgemd.com",
     subject: `Welcome to Online Shop, ${user.email}`,
     html: `<h1>You successfully signed up!</h1>`,
@@ -200,8 +201,8 @@ async function postReset(req, res, next) {
     return;
   }
   await user.saveResetToken(resetToken, resetTokenExpiry, existingUser._id);
-  sendgrid.send({
-    to: "test2022@knowledgemd.com",
+  transport.sendMail({
+    to: user.email,
     from: "gavin-oliver@knowledgemd.com",
     subject: `Password reset, ${user.email}`,
     html: `<p>You requested a paassword reset</p>
@@ -265,9 +266,10 @@ async function postNewPassword(req, res, next) {
     return;
   }
   try {
-    await User.updatePassword(passwordToken, userId, newPassword);
-    sendgrid.send({
-      to: "test2022@knowledgemd.com",
+   const user = await User.updatePassword(passwordToken, userId, newPassword);
+
+    transport.sendMail({
+      to: user.value.email,
       from: "gavin-oliver@knowledgemd.com",
       subject: `Password reset Successfully,`,
       html: `<p>Your requested  paasword has been reset</p>
