@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.15.0"
+  },
   "scripts": {
     "start": "SET NODE_ENV=production & node app.js",
     "start-server": "node app.js",

@@ -42,8 +42,8 @@ const sessionConfig = createSessionConfig();
 
 app.use(expressSession(sessionConfig));
 app.use(csrf());
-const privateKey = fs.readFileSync('server.key');
-const certificate = fs.readFileSync('server.cert');
+// const privateKey = fs.readFileSync('server.key');
+// const certificate = fs.readFileSync('server.cert');
 
 app.use(cartMiddleware);
 app.use(updateCartPricesMiddleware);
