@@ -206,7 +206,7 @@ async function postReset(req, res, next) {
     from: "gavin-oliver@knowledgemd.com",
     subject: `Password reset, ${user.email}`,
     html: `<p>You requested a paassword reset</p>
-             <p>Click this <a href="http://localhost:3000/reset/${resetToken}">link</a> to set a new password</p>`,
+             <p>Click this <a href="/reset/${resetToken}">link</a> to set a new password</p>`,
   });
   res.redirect("/");
 }
