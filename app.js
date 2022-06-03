@@ -3,6 +3,7 @@ const path = require("path");
 require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
+const https = require("https");
 const csrf = require("csurf");
 const expressSession = require("express-session");
 const helmet = require("helmet");
@@ -41,6 +42,8 @@ const sessionConfig = createSessionConfig();
 
 app.use(expressSession(sessionConfig));
 app.use(csrf());
+const privateKey = fs.readFileSync('server.key');
+const certificate = fs.readFileSync('server.cert');
 
 app.use(cartMiddleware);
 app.use(updateCartPricesMiddleware);
@@ -59,7 +62,10 @@ app.use(errorHandlerMiddleware);
 
 db.connectToDatabase()
   .then(function () {
-    app.listen(process.env.PORT || 3000);
+    https.createServer({
+      key: privateKey,
+      cert: certificate
+    },app).listen(process.env.PORT || 3000);
     
   })
   .catch(function (error) {
