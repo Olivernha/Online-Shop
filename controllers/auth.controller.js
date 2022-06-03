@@ -10,8 +10,8 @@ const transport = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "6069e662c623a2",
-    pass: "9b820502e52213"
+    user: process.env.MAILTRAP_USER,
+    pass: process.env.MAILTRAP_PASS,
   }
 });
 function getSignup(req, res) {
@@ -100,7 +100,7 @@ async function signup(req, res, next) {
   }
 
   transport.sendMail({
-    to: "test2022@knowledgemd.com",
+    to: user.email,
     from: "gavin-oliver@knowledgemd.com",
     subject: `Welcome to Online Shop, ${user.email}`,
     html: `<h1>You successfully signed up!</h1>`,
@@ -202,7 +202,7 @@ async function postReset(req, res, next) {
   }
   await user.saveResetToken(resetToken, resetTokenExpiry, existingUser._id);
   transport.sendMail({
-    to: "test2022@knowledgemd.com",
+    to: user.email,
     from: "gavin-oliver@knowledgemd.com",
     subject: `Password reset, ${user.email}`,
     html: `<p>You requested a paassword reset</p>
@@ -266,9 +266,10 @@ async function postNewPassword(req, res, next) {
     return;
   }
   try {
-    await User.updatePassword(passwordToken, userId, newPassword);
-    sendgrid.send({
-      to: "test2022@knowledgemd.com",
+   const user = await User.updatePassword(passwordToken, userId, newPassword);
+
+    transport.sendMail({
+      to: user.value.email,
       from: "gavin-oliver@knowledgemd.com",
       subject: `Password reset Successfully,`,
       html: `<p>Your requested  paasword has been reset</p>
