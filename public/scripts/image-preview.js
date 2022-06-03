@@ -9,7 +9,7 @@ function updateImagePreview() {
   }
   const pickedFile = file[0];
 
-  imagePreview.src = URL.createObjectURL(pickedFile);
+  imagePreview.src = window.URL.createObjectURL(pickedFile);
   imagePreview.style.display = "block";
 }
 imagePicker.addEventListener("change", updateImagePreview);
