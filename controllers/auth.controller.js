@@ -1,18 +1,19 @@
 // const nodemailer = require('nodemailer');
 // const sendgridTransport = require('nodemailer-sendgrid-transport');
-const sendgrid = require("@sendgrid/mail");
+const nodemailer = require("nodemailer");
 const User = require("../models/user.model");
 const authUtil = require("../util/authentication");
 const validation = require("../util/validation");
 const sessionFlash = require("../util/session-flash");
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-// const transporter = nodemailer.createTransport(
-//   sendgridTransport({
-//     auth: {
-//       api_key: process.env.SENDGRID_API_KEY
-//     },
-//   })
-// );
+
+const transport = nodemailer.createTransport({
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "6069e662c623a2",
+    pass: "9b820502e52213"
+  }
+});
 function getSignup(req, res) {
   let sessionData = sessionFlash.getSessionData(req);
   if (!sessionData) {
@@ -98,7 +99,7 @@ async function signup(req, res, next) {
     return;
   }
 
-  sendgrid.send({
+  transport.sendMail({
     to: "test2022@knowledgemd.com",
     from: "gavin-oliver@knowledgemd.com",
     subject: `Welcome to Online Shop, ${user.email}`,
@@ -200,7 +201,7 @@ async function postReset(req, res, next) {
     return;
   }
   await user.saveResetToken(resetToken, resetTokenExpiry, existingUser._id);
-  sendgrid.send({
+  transport.sendMail({
     to: "test2022@knowledgemd.com",
     from: "gavin-oliver@knowledgemd.com",
     subject: `Password reset, ${user.email}`,
