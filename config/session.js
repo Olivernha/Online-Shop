@@ -3,7 +3,7 @@ const mongoDbStore = require('connect-mongodb-session');
 function createSessionStore() {
     const MongoDBStore = mongoDbStore(expressSession);
     const store= new MongoDBStore({
-        uri: process.env.URL,
+        uri: process.env.MONGO_URL,
         collection: 'sessions'
     });
    return store;
