@@ -1,7 +1,9 @@
 name: Online-Shop-nodejs CI
 on:
-  push: branches:[production]
-  pull_request: branches:[production]
+  push: 
+     branches: [production]
+  pull_request:
+     branches: [production]
 
 jobs:
   build:
