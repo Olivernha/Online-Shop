@@ -1,0 +1,15 @@
+name: Online-Shop-nodejs CI
+on:
+  push: branches:[production]
+  pull_request: branches:[production]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses:   
+      - name: Use Node.js version 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: npm install
